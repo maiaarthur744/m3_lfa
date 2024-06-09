@@ -1,5 +1,6 @@
 import tkinter as tk
 
+#  código da m2 pra usar meio como base 
 
 class GUI:
     def __init__(self):

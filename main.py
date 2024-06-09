@@ -1,7 +1,8 @@
 from transition import *
-
+# teste de instanciamento de objeto
 t1 = Transition("test", "test", "test", "test", "test")
 
+# código da m2 pra usar meio como base 
 
 # def analyseRegularExpression(self):
 #     last_symbol = self.get_last_symbol(self.AField)
