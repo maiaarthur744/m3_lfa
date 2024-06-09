@@ -45,12 +45,76 @@ class GUI:
     def selectFile(self):
         try:
             selected_file = self.fileList.get(self.fileList.curselection())
-            self.showSelectedFile(selected_file)
+            self.loadTuringMachine(selected_file)
         except tk.TclError:
             messagebox.showwarning("Nenhuma seleção", "Por favor, selecione um arquivo da lista.")
 
-    def showSelectedFile(self, filename):
-        messagebox.showinfo("Arquivo Selecionado", f"Você selecionou o arquivo: {filename}")
+    def loadTuringMachine(self, filename):
+        self.transitions, self.sentence = utils.load_transitions(filename)
+        self.clearWindow()
+
+        self.labelC = tk.Label(self.window, text="Sentenças lidas do arquivo", font=("Arial", 18))
+        self.labelC.pack(padx=20, pady=10)
+
+        self.sentenceField = tk.Text(self.window, height=10, font=("Arial", 18))
+        self.sentenceField.pack(padx=10, pady=20)
+        self.sentenceField.insert("1.0", "\n".join([f"{t.currentState}, {t.currentSymbol}, {t.newState}, {t.newSymbol}, {t.direction}" for t in self.transitions]))
+        self.sentenceField.config(state='disabled')
+
+        self.startButton = tk.Button(self.window, text="Iniciar", font=("Arial", 15), command=self.startTuringMachine)
+        self.startButton.pack(padx=10, pady=10)
+
+    def clearWindow(self):
+        for widget in self.window.winfo_children():
+            widget.destroy()
+
+    def startTuringMachine(self):
+        self.clearWindow()
+
+        self.labelSteps = tk.Label(self.window, text="Passos da Execução", font=("Arial", 18))
+        self.labelSteps.pack(padx=20, pady=10)
+
+        self.stepsField = tk.Text(self.window, height=20, font=("Arial", 18))
+        self.stepsField.pack(padx=10, pady=20)
+
+        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 18))
+        self.resultLabel.pack(padx=20, pady=10)
+
+        self.runTuringMachine()
+
+    def runTuringMachine(self):
+        currentState = '$'  # Estado inicial
+        tape = list(self.sentence)
+        head = 0
+        step = 0
+
+        while True:
+            currentSymbol = tape[head] if head < len(tape) else ' '
+            transition = next((t for t in self.transitions if t.currentState == currentState and t.currentSymbol == currentSymbol), None)
+
+            if not transition:
+                self.stepsField.insert("end", f"Passo {step}: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
+                break
+
+            tape[head] = transition.newSymbol
+            currentState = transition.newState
+            if transition.direction == 'D':
+                head += 1
+                if head >= len(tape):
+                    tape.append(' ')
+            elif transition.direction == 'E':
+                head -= 1
+                if head < 0:
+                    tape.insert(0, ' ')
+                    head = 0
+
+            self.stepsField.insert("end", f"Passo {step}: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
+            step += 1
+
+        if currentState == 'x':  # Estado final de aceitação
+            self.resultLabel.config(text="Sentença Aceita!")
+        else:
+            self.resultLabel.config(text="Sentença Rejeitada!")
 
 # Criação da interface gráfica
 if __name__ == "__main__":
