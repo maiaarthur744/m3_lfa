@@ -1,0 +1,12 @@
+q0, $, q0, $, D
+q0, a, q1, A, D
+q0, B, q3, B, D
+q0, x, q4, x, D
+q1, a, q1, a, D
+q1, b, q2, B, E
+q1, B, q1, B, D
+q2, a, q2, a, E
+q2, A, q0, A, D
+q2, B, q2, B, E
+q3, B, q3, B, D
+q3, x, q4, x, D
