@@ -47,22 +47,35 @@ class GUI:
             selected_file = self.fileList.get(self.fileList.curselection())
             self.loadTuringMachine(selected_file)
         except tk.TclError:
-            messagebox.showwarning("Nenhuma seleção", "Por favor, selecione um arquivo da lista.")
+            messagebox.showwarning("Nenhuma arquivo selecionado", "Por favor, selecione um arquivo da lista.")
 
     def loadTuringMachine(self, filename):
-        self.transitions, self.sentence = utils.load_transitions(filename)
+        self.transitions = utils.load_transitions(filename)
         self.clearWindow()
 
-        self.labelC = tk.Label(self.window, text="Sentenças lidas do arquivo", font=("Arial", 18))
+        self.labelC = tk.Label(self.window, text="Transições lidas do arquivo", font=("Arial", 18))
         self.labelC.pack(padx=20, pady=10)
 
-        self.sentenceField = tk.Text(self.window, height=10, font=("Arial", 18))
-        self.sentenceField.pack(padx=10, pady=20)
-        self.sentenceField.insert("1.0", "\n".join([f"{t.currentState}, {t.currentSymbol}, {t.newState}, {t.newSymbol}, {t.direction}" for t in self.transitions]))
-        self.sentenceField.config(state='disabled')
+        self.transitionField = tk.Text(self.window, height=10, font=("Arial", 18))
+        self.transitionField.pack(padx=10, pady=20)
+        self.transitionField.insert("1.0", "\n".join([f"{t.currentState}, {t.currentSymbol}, {t.newState}, {t.newSymbol}, {t.direction}" for t in self.transitions]))
+        self.transitionField.config(state='disabled')
 
-        self.startButton = tk.Button(self.window, text="Iniciar", font=("Arial", 15), command=self.startTuringMachine)
+        self.labelD = tk.Label(self.window, text="Por favor informe a sentença que deseja reconhecer", font=("Arial", 18))
+        self.labelD.pack(padx=20, pady=10)
+
+        self.sentenceField = tk.Text(self.window, height= 5, font=("Arial", 18))
+        self.sentenceField.pack(padx=10, pady=10)
+        
+        self.startButton = tk.Button(self.window, text="Iniciar", font=("Arial", 15), command=self.onButtonClick)
         self.startButton.pack(padx=10, pady=10)
+
+    def onButtonClick(self):
+        self.readSentence()
+        self.startTuringMachine()
+
+    def readSentence(self):
+        self.sentence = self.sentenceField.get("1.0", "end-1c")
 
     def clearWindow(self):
         for widget in self.window.winfo_children():
@@ -71,13 +84,13 @@ class GUI:
     def startTuringMachine(self):
         self.clearWindow()
 
-        self.labelSteps = tk.Label(self.window, text="Passos da Execução", font=("Arial", 18))
+        self.labelSteps = tk.Label(self.window, text="Passos da Execução\nSentença lida: " + self.sentence, font=("Arial", 18))
         self.labelSteps.pack(padx=20, pady=10)
 
         self.stepsField = tk.Text(self.window, height=20, font=("Arial", 18))
         self.stepsField.pack(padx=10, pady=20)
 
-        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 18))
+        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 18)) # o que isso faz?
         self.resultLabel.pack(padx=20, pady=10)
 
         self.runTuringMachine()
