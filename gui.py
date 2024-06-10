@@ -5,27 +5,27 @@ import utils
 class GUI:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.geometry("1200x1000")
+        self.window.geometry("800x600")
         self.window.title("Turing Machine")
 
-        self.labelA = tk.Label(self.window, text="Arquivos .txt no diretório", font=("Arial", 18))
-        self.labelA.pack(padx=20, pady=10)
+        self.labelA = tk.Label(self.window, text="Arquivos .txt no diretório", font=("Arial", 12))
+        self.labelA.pack(padx=10, pady=5)
 
-        self.AField = tk.Text(self.window, height=10, font=("Arial", 18))
-        self.AField.pack(padx=10, pady=20)
+        self.AField = tk.Text(self.window, height=5, font=("Arial", 12))
+        self.AField.pack(padx=5, pady=10)
         self.AField.config(state='disabled')
 
         self.listFiles()
 
-        self.labelB = tk.Label(self.window, text="Selecionar arquivo", font=("Arial", 18))
-        self.labelB.pack(padx=20, pady=10)
+        self.labelB = tk.Label(self.window, text="Selecionar arquivo", font=("Arial", 12))
+        self.labelB.pack(padx=10, pady=5)
 
-        self.fileList = Listbox(self.window, font=("Arial", 18))
-        self.fileList.pack(padx=10, pady=20)
+        self.fileList = Listbox(self.window, font=("Arial", 12))
+        self.fileList.pack(padx=5, pady=10)
         self.populateFileList()
 
-        self.selectButton = tk.Button(self.window, text="Selecionar", font=("Arial", 15), command=self.selectFile)
-        self.selectButton.pack(padx=10, pady=10)
+        self.selectButton = tk.Button(self.window, text="Selecionar", font=("Arial", 12), command=self.selectFile)
+        self.selectButton.pack(padx=5, pady=5)
 
         self.window.mainloop()
 
@@ -53,18 +53,18 @@ class GUI:
         self.transitions = utils.load_transitions(filename)
         self.clearWindow()
 
-        self.labelC = tk.Label(self.window, text="Transições lidas do arquivo", font=("Arial", 18))
+        self.labelC = tk.Label(self.window, text="Transições lidas do arquivo", font=("Arial", 12))
         self.labelC.pack(padx=20, pady=10)
 
-        self.transitionField = tk.Text(self.window, height=10, font=("Arial", 18))
+        self.transitionField = tk.Text(self.window, height=10, font=("Arial", 12))
         self.transitionField.pack(padx=10, pady=20)
         self.transitionField.insert("1.0", "\n".join([f"{t.currentState}, {t.currentSymbol}, {t.newState}, {t.newSymbol}, {t.direction}" for t in self.transitions]))
         self.transitionField.config(state='disabled')
 
-        self.labelD = tk.Label(self.window, text="Por favor informe a sentença que deseja reconhecer", font=("Arial", 18))
+        self.labelD = tk.Label(self.window, text="Por favor informe a sentença que deseja reconhecer", font=("Arial", 12))
         self.labelD.pack(padx=20, pady=10)
 
-        self.sentenceField = tk.Text(self.window, height= 5, font=("Arial", 18))
+        self.sentenceField = tk.Text(self.window, height= 5, font=("Arial", 12))
         self.sentenceField.pack(padx=10, pady=10)
         
         self.startButton = tk.Button(self.window, text="Iniciar", font=("Arial", 15), command=self.onButtonClick)
@@ -84,13 +84,13 @@ class GUI:
     def startTuringMachine(self):
         self.clearWindow()
 
-        self.labelSteps = tk.Label(self.window, text="Passos da Execução\nSentença lida: " + self.sentence, font=("Arial", 18))
+        self.labelSteps = tk.Label(self.window, text="Passos da Execução\nSentença lida: " + self.sentence, font=("Arial", 12))
         self.labelSteps.pack(padx=20, pady=10)
 
-        self.stepsField = tk.Text(self.window, height=20, font=("Arial", 18))
+        self.stepsField = tk.Text(self.window, height=20, font=("Arial", 12))
         self.stepsField.pack(padx=10, pady=20)
 
-        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 18)) # o que isso faz?
+        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 12)) # o que isso faz?
         self.resultLabel.pack(padx=20, pady=10)
 
         self.runTuringMachine()
