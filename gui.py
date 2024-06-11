@@ -99,13 +99,14 @@ class GUI:
         # TODO onde estamos verificando se o head vai para a esquerda do elemento 0??
         # TODO será que precisamos passar o alfabeto da linguagem em algum lugar??
 
-        currentState = '$' # Estado inicial
+        currentState = 'q0' # Estado inicial
         tape = list(self.sentence) # tem que ter uns 100 elementos
+        tape.insert(0, '$')
         head = 0
         step = 0
 
         while True:
-            currentSymbol = tape[head] if head < len(tape) and head > 0 else 'x' # x é o em branco
+            currentSymbol = tape[head] # if head < len(tape) and head > 0 else 'x' # x é o em branco
             transition = next((t for t in self.transitions if t.currentState == currentState and t.currentSymbol == currentSymbol), None)
 
             if not transition: # na verdade isso aqui já daria erro né?
@@ -121,8 +122,7 @@ class GUI:
             elif transition.direction == 'E':
                 head -= 1
                 if head < 0:
-                    tape.insert(0, 'x') # x é o em branco
-                    head = 0
+                    break;
 
             self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n") # Não funcionou
             step += 1
