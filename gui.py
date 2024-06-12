@@ -103,18 +103,24 @@ class GUI:
         tape = list(self.sentence) # tem que ter uns 100 elementos
         tape.insert(0, '$')
         head = 0
-        step = 0
+        step = 1
+
+        #self.stepsField.insert("end", f"Passo3 {step}: Estado atual: {currentState}, Símbolo lido: {tape[head]}, Fita: {''.join(tape)}\n") # Não funcionou
+        #step += 1
+
 
         while True:
             currentSymbol = tape[head] # if head < len(tape) and head > 0 else 'x' # x é o em branco
             transition = next((t for t in self.transitions if t.currentState == currentState and t.currentSymbol == currentSymbol), None)
 
             if not transition: # na verdade isso aqui já daria erro né?
-                self.stepsField.insert("end", f"Passo {step}: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
+                self.stepsField.insert("end", f"\nResultado: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
                 break
 
+            self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n") # Não funcionou
             tape[head] = transition.newSymbol
             currentState = transition.newState
+            step +=1
             if transition.direction == 'D':
                 head += 1
                 if head >= len(tape):
@@ -124,8 +130,6 @@ class GUI:
                 if head < 0:
                     break;
 
-            self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n") # Não funcionou
-            step += 1
 
         if currentState == 'x':  # Estado final de aceitação
             self.resultLabel.config(text="Sentença Aceita!") 
