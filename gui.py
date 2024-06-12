@@ -50,7 +50,7 @@ class GUI:
             messagebox.showwarning("Nenhuma arquivo selecionado", "Por favor, selecione um arquivo da lista.")
 
     def loadTuringMachine(self, filename):
-        self.transitions = utils.load_transitions(filename)
+        self.transitions, self.initialState, self.finalState = utils.load_transitions(filename)
         self.clearWindow()
 
         self.labelC = tk.Label(self.window, text="Transições lidas do arquivo", font=("Arial", 12))
@@ -64,7 +64,7 @@ class GUI:
         self.labelD = tk.Label(self.window, text="Por favor informe a sentença que deseja reconhecer", font=("Arial", 12))
         self.labelD.pack(padx=20, pady=10)
 
-        self.sentenceField = tk.Text(self.window, height= 5, font=("Arial", 12))
+        self.sentenceField = tk.Text(self.window, height=5, font=("Arial", 12))
         self.sentenceField.pack(padx=10, pady=10)
         
         self.startButton = tk.Button(self.window, text="Iniciar", font=("Arial", 15), command=self.onButtonClick)
@@ -96,46 +96,42 @@ class GUI:
         self.runTuringMachine()
 
     def runTuringMachine(self):
-        # TODO onde estamos verificando se o head vai para a esquerda do elemento 0??
-        # TODO será que precisamos passar o alfabeto da linguagem em algum lugar??
-
-        currentState = 'q0' # Estado inicial
-        tape = list(self.sentence) # tem que ter uns 100 elementos
+        currentState = self.initialState  # Estado inicial
+        tape = list(self.sentence)  # Inicializa a fita com a sentença lida
         tape.insert(0, '$')
         head = 0
         step = 1
 
-        #self.stepsField.insert("end", f"Passo3 {step}: Estado atual: {currentState}, Símbolo lido: {tape[head]}, Fita: {''.join(tape)}\n") # Não funcionou
-        #step += 1
-
-
         while True:
-            currentSymbol = tape[head] # if head < len(tape) and head > 0 else 'x' # x é o em branco
+            currentSymbol = tape[head] if head < len(tape) else 'x'
             transition = next((t for t in self.transitions if t.currentState == currentState and t.currentSymbol == currentSymbol), None)
 
-            if not transition: # na verdade isso aqui já daria erro né?
-                self.stepsField.insert("end", f"\nResultado: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
+            if not transition:  # Nenhuma transição encontrada, máquina para
+                self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
                 break
 
-            self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n") # Não funcionou
+            self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
             tape[head] = transition.newSymbol
             currentState = transition.newState
-            step +=1
+            step += 1
             if transition.direction == 'D':
                 head += 1
                 if head >= len(tape):
-                    tape.append('x') # x é o em branco
+                    tape.append('x')  # Adiciona espaço em branco
             elif transition.direction == 'E':
                 head -= 1
                 if head < 0:
-                    break;
+                    tape.insert(0, 'x')
+                    head = 0
 
+            if currentState == self.finalState:  # Verifica se atingiu o estado final
+                self.stepsField.insert("end", f"Passo {step}: Estado atual: {currentState}, Símbolo lido: {currentSymbol}, Fita: {''.join(tape)}\n")
+                self.resultLabel.config(text="Sentença Aceita!")
+                return
 
-        if currentState == 'x':  # Estado final de aceitação
-            self.resultLabel.config(text="Sentença Aceita!") 
-        else:
-            self.resultLabel.config(text="Sentença Rejeitada!")
+        self.resultLabel.config(text="Sentença Rejeitada!")
 
 # Criação da interface gráfica
 if __name__ == "__main__":
     gui = GUI()
+

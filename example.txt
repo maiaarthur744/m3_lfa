@@ -10,3 +10,4 @@ q2, A, q0, A, D
 q2, B, q2, B, E
 q3, B, q3, B, D
 q3, x, q4, x, D
+q0, q4
