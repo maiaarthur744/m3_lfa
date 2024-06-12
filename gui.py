@@ -8,17 +8,8 @@ class GUI:
         self.window.geometry("800x600")
         self.window.title("Turing Machine")
 
-        self.labelA = tk.Label(self.window, text="Arquivos .txt no diretório", font=("Arial", 12))
+        self.labelA = tk.Label(self.window, text="Selecione um dos arquivos disponíveis", font=("Arial", 12))
         self.labelA.pack(padx=10, pady=5)
-
-        self.AField = tk.Text(self.window, height=5, font=("Arial", 12))
-        self.AField.pack(padx=5, pady=10)
-        self.AField.config(state='disabled')
-
-        self.listFiles()
-
-        self.labelB = tk.Label(self.window, text="Selecionar arquivo", font=("Arial", 12))
-        self.labelB.pack(padx=10, pady=5)
 
         self.fileList = Listbox(self.window, font=("Arial", 12))
         self.fileList.pack(padx=5, pady=10)
@@ -28,14 +19,6 @@ class GUI:
         self.selectButton.pack(padx=5, pady=5)
 
         self.window.mainloop()
-
-    def listFiles(self):
-        txt_files = utils.list_txt_files()
-        self.AField.config(state='normal')
-        self.AField.delete("1.0", "end")
-        for file in txt_files:
-            self.AField.insert("end", file + '\n')
-        self.AField.config(state='disabled')
 
     def populateFileList(self):
         txt_files = utils.list_txt_files()
@@ -61,8 +44,11 @@ class GUI:
         self.transitionField.insert("1.0", "\n".join([f"{t.currentState}, {t.currentSymbol}, {t.newState}, {t.newSymbol}, {t.direction}" for t in self.transitions]))
         self.transitionField.config(state='disabled')
 
-        self.labelD = tk.Label(self.window, text="Por favor informe a sentença que deseja reconhecer", font=("Arial", 12))
+        self.labelD = tk.Label(self.window, text="Informe a sentença que deseja reconhecer", font=("Arial", 12))
         self.labelD.pack(padx=20, pady=10)
+
+        self.labelE = tk.Label(self.window, text="(Não é necessário inserir o símbolo de estado inicial nem final)", font=("Arial", 10))
+        self.labelE.pack(padx=20, pady=5)
 
         self.sentenceField = tk.Text(self.window, height=5, font=("Arial", 12))
         self.sentenceField.pack(padx=10, pady=10)
@@ -75,7 +61,7 @@ class GUI:
         self.startTuringMachine()
 
     def readSentence(self):
-        self.sentence = self.sentenceField.get("1.0", "end-1c")
+        self.sentence = self.sentenceField.get("1.0", "end-1c") + 'x'  # Adiciona 'x' ao final da sentença
 
     def clearWindow(self):
         for widget in self.window.winfo_children():
@@ -90,7 +76,7 @@ class GUI:
         self.stepsField = tk.Text(self.window, height=20, font=("Arial", 12))
         self.stepsField.pack(padx=10, pady=20)
 
-        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 12)) # o que isso faz?
+        self.resultLabel = tk.Label(self.window, text="", font=("Arial", 12))
         self.resultLabel.pack(padx=20, pady=10)
 
         self.runTuringMachine()
