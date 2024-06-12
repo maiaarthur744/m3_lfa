@@ -10,7 +10,6 @@ class Transition:
 
 def load_transitions(file_path):
     transitions = []
-    sentence = ""
     with open(file_path, 'r') as file:
         lines = file.readlines()
         for line in lines:
@@ -18,10 +17,7 @@ def load_transitions(file_path):
             if len(parts) == 5:
                 transition = Transition(parts[0], parts[1], parts[2], parts[3], parts[4])
                 transitions.append(transition)
-            else:
-                # Assumindo que a sentença é a última linha do arquivo
-                sentence = line.strip()
-    return transitions, sentence
+    return transitions
 
 def list_txt_files(directory='.'):
     """Retorna uma lista de arquivos .txt no diretório especificado."""
