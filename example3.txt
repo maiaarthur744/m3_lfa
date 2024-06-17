@@ -1,1 +1,21 @@
-botar aqui umas outras transições no mesmo padrão do example.txt. Esses vão ser os arquivos que o professor vai poder escolher
+q0, $, q0, $, D
+q0, a, q1, $, D
+q0, b, q2, $, D
+q0, x, q5, x, D
+q1, a, q1, a, D
+q1, b, q1, b, D
+q1, x, q3, x, E
+q2, a, q2, a, D
+q2, b, q2, b, D
+q2, x, q4, x, E
+q3, a, q3, a, E
+q3, b, q3, b, E
+q3, $, q0, $, D
+q4, a, q4, a, E
+q4, b, q4, b, E
+q4, $, q0, $, D
+q5, $, q5, $, D
+q5, a, q5, a, D
+q5, b, q5, b, D
+q5, x, q5, x, D
+q0, q5
