@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import messagebox, Listbox
 import utils
 
+# Exemplos de sentenças válidas para o exemplo 1: sentença vazia, B, aabb
+# Exemplos de sentenças válidas para o exemplo 2: sentença vazia, b, bb
+# Exemplos de sentenças válidas para o exemplo 3: sentença vazia, bbba
+
 class GUI:
     def __init__(self):
         self.window = tk.Tk()
@@ -64,7 +68,7 @@ class GUI:
         self.startTuringMachine()
 
     def readSentence(self):
-        self.sentence = self.sentenceField.get("1.0", "end-1c") + 'x'  # Adiciona 'x' ao final da sentença
+        self.sentence = self.sentenceField.get("1.0", "end-1c") + 'x'
 
     def get_alphabet(self):
         alphabet = set()
@@ -135,7 +139,6 @@ class GUI:
 
         self.resultLabel.config(text="Sentença Rejeitada!")
 
-# Criação da interface gráfica
 if __name__ == "__main__":
     gui = GUI()
 
