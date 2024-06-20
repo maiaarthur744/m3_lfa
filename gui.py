@@ -58,10 +58,28 @@ class GUI:
 
     def onButtonClick(self):
         self.readSentence()
+        if not self.is_sentence_in_alphabet():
+            messagebox.showwarning("Sentença Inválida", "A sentença contém caracteres que não estão no alfabeto da máquina de Turing.")
+            return
         self.startTuringMachine()
 
     def readSentence(self):
         self.sentence = self.sentenceField.get("1.0", "end-1c") + 'x'  # Adiciona 'x' ao final da sentença
+
+    def get_alphabet(self):
+        alphabet = set()
+        for transition in self.transitions:
+            alphabet.add(transition.currentSymbol)
+            alphabet.add(transition.newSymbol)
+        alphabet.discard('$')  # Remover símbolo de estado inicial
+        return alphabet
+
+    def is_sentence_in_alphabet(self):
+        alphabet = self.get_alphabet()
+        for char in self.sentence:
+            if char not in alphabet:
+                return False
+        return True
 
     def clearWindow(self):
         for widget in self.window.winfo_children():
